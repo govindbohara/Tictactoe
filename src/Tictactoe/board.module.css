@@ -1,0 +1,16 @@
+.board {
+	border: 1px solid #000;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	max-width: 45rem;
+
+	padding: 1rem 1rem 0 1rem;
+}
+.item {
+	margin: 0.5rem;
+	cursor: pointer;
+	padding: 1rem;
+	text-align: center;
+
+	border: 1px solid #000;
+}
