@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@mantine/core';
 import classes from './board.module.css';
 
@@ -20,6 +20,7 @@ const TictactoeBoard = () => {
 		[1, 4, 7],
 		[2, 5, 8],
 	];
+
 	const checkWinner = arr => {
 		WINNING_COMBINATION.forEach(item => {
 			if (arr[item[0]] === '' || arr[item[1]] === '' || arr[item[2]] === '') {
@@ -27,6 +28,17 @@ const TictactoeBoard = () => {
 				setWinner(arr[item[0]]);
 			}
 		});
+	};
+	const checkTie = arr => {
+		let counter = 0;
+		arr.forEach(item => {
+			if (item !== '') {
+				counter++;
+			}
+		});
+		if (counter === 9) {
+			setDraw(true);
+		}
 	};
 
 	const changeHandler = num => {
@@ -43,11 +55,13 @@ const TictactoeBoard = () => {
 			allValues[num] = 'O';
 			setPlayer('X');
 		}
+
 		if (winner) {
 			return;
 		}
 
 		checkWinner(allValues);
+		checkTie(allValues);
 		setBox(allValues);
 	};
 
@@ -82,12 +96,17 @@ const TictactoeBoard = () => {
 					Winner : {winner} wins
 				</h2>
 			)}
-			{draw && <p>The game was draw</p>}
+			{!winner && draw && (
+				<h2 style={{ textAlign: 'center', fontFamily: 'inherit' }}>
+					The game was draw
+				</h2>
+			)}
 			<Button
 				className={classes.btn}
 				onClick={() => {
 					setWinner(null);
 					setBox(Array(9).fill(''));
+					setDraw(false);
 				}}
 			>
 				Replay the game
