@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Button } from '@mantine/core';
 import classes from './board.module.css';
 
 const TictactoeBoard = () => {
@@ -6,6 +7,7 @@ const TictactoeBoard = () => {
 	const random = randomPlayer[Math.floor(Math.random() * randomPlayer.length)];
 	const [player, setPlayer] = useState(random);
 	const [winner, setWinner] = useState();
+	const [draw, setDraw] = useState(false);
 
 	const [box, setBox] = useState(Array(9).fill(''));
 	const WINNING_COMBINATION = [
@@ -20,9 +22,7 @@ const TictactoeBoard = () => {
 	];
 	const checkWinner = arr => {
 		WINNING_COMBINATION.forEach(item => {
-			console.log(item);
 			if (arr[item[0]] === '' || arr[item[1]] === '' || arr[item[2]] === '') {
-				console.log('hello');
 			} else if (arr[item[0]] === arr[item[1]] && arr[item[1]] === arr[item[2]]) {
 				setWinner(arr[item[0]]);
 			}
@@ -43,6 +43,10 @@ const TictactoeBoard = () => {
 			allValues[num] = 'O';
 			setPlayer('X');
 		}
+		if (winner) {
+			return;
+		}
+
 		checkWinner(allValues);
 		setBox(allValues);
 	};
@@ -55,8 +59,13 @@ const TictactoeBoard = () => {
 		);
 	};
 	return (
-		<div>
-			<h1>Player turn: {player}</h1>
+		<div className={classes.main}>
+			<h1 style={{ textAlign: 'center', fontFamily: 'inherit' }}>Tic Tac Toe</h1>
+			{!winner && (
+				<h2 style={{ textAlign: 'center', fontFamily: 'inherit' }}>
+					Player turn: {player}
+				</h2>
+			)}
 			<div className={classes.board}>
 				<Item num={0} />
 				<Item num={1} />
@@ -68,15 +77,21 @@ const TictactoeBoard = () => {
 				<Item num={7} />
 				<Item num={8} />
 			</div>
-			{winner && <h3>Winner :{winner} wins</h3>}
-			<button
+			{winner && (
+				<h2 style={{ textAlign: 'center', fontFamily: 'inherit' }}>
+					Winner : {winner} wins
+				</h2>
+			)}
+			{draw && <p>The game was draw</p>}
+			<Button
+				className={classes.btn}
 				onClick={() => {
 					setWinner(null);
 					setBox(Array(9).fill(''));
 				}}
 			>
 				Replay the game
-			</button>
+			</Button>
 		</div>
 	);
 };
